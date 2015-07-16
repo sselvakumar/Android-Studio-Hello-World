@@ -1,0 +1,75 @@
+//Applies the Android plugin for Gradle to this build
+apply plugin: 'com.android.application'
+
+//Configures all the Android-specific build options
+android {
+    //Property specifies the compilation target
+    compileSdkVersion 22
+    //Property specifies what version of the build tools to use
+    buildToolsVersion "22.0.1"
+    //Configures core settings and entries in the manifest file (AndroidManifest.xml) dynamically from the build system
+    defaultConfig {
+        applicationId "com.impigertech.helloworld"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+
+    //SigningConfigs
+    signingConfigs {
+        releaseconfig {
+            keyAlias '12345'
+            keyPassword '123456'
+            storeFile file('D:/Projects/AndroidStudio/Keystore/helloworld.jks')
+            storePassword '123456'
+        }
+    }
+
+    //By default, the build system defines two build types: debug and release
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //Sign your app in release mode
+            signingConfig signingConfigs.releaseconfig
+            versionNameSuffix '-release'
+        }
+    }
+    productFlavors {
+        pro {
+            applicationId = "com.impigertech.helloworld.pro"
+            versionName "1.0-pro"
+        }
+        free {
+            applicationId = "com.impigertech.helloworld.free"
+            versionName "1.0-free"
+        }
+    }
+
+
+}
+
+//Declares the dependencies for this module
+dependencies {
+    // Module dependency
+    //compile project(":lib")
+    // Local binary dependency
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // Remote binary dependency
+    compile 'com.android.support:appcompat-v7:22.2.0'
+}
+
+
+/*
+Build Variants
+For example product flavors and build types create the following build variants:
+
+freeDebug
+freeRelease
+proDebug
+proRelease*/
